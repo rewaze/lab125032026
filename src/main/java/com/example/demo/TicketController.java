@@ -2,6 +2,7 @@ package com.example.demo;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -15,16 +16,19 @@ public class TicketController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public List<Ticket> getAllTickets() {
         return ticketService.getAllTickets();
     }
 
     @GetMapping("/user/{userId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public List<Ticket> getTicketsByUserId(@PathVariable String userId) {
         return ticketService.getTicketsByUserId(userId);
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticket) {
         Ticket savedTicket = ticketService.createTicket(ticket);
         return new ResponseEntity<>(savedTicket, HttpStatus.CREATED);
